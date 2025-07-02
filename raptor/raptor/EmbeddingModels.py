@@ -1,3 +1,4 @@
+import os
 import logging
 from abc import ABC, abstractmethod
 
@@ -16,7 +17,8 @@ class BaseEmbeddingModel(ABC):
 
 class OpenAIEmbeddingModel(BaseEmbeddingModel):
     def __init__(self, model="text-embedding-ada-002"):
-        self.client = OpenAI()
+        api_key = os.getenv("OPENAI_API_KEY")
+        self.client = OpenAI(api_key=api_key)
         self.model = model
 
     @retry(wait=wait_random_exponential(min=1, max=20), stop=stop_after_attempt(6))
